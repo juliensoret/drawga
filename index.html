@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Drawga</title>
+    <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAADAFBMVEUAAABmZmYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfhvjMAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAJcEhZcwAACxMAAAsTAQCanBgAAAAHdElNRQfWCxYQGiCddBWjAAAAM0lEQVQY02NgwAIYIQBJACqMIcCIIcCIIoDEICSAbBiYyYisArsACkA2EmYspgC6FjQAACH4AEiFcu7bAAAAAElFTkSuQmCC" rel="icon" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body ng-controller="myCtrl">
+    <div class="loader" ng-if="false">Chargement ...</div>
+    <div class="informations no-print">
+        <header class="page-header">
+            <h1>Drawga <span>Vos users sorties Taiga prêtes-à-imprimer</span></h1>
+        </header>
+        <form>
+            <p>
+                <label for="csv">Fichier dump (.csv) de Taiga : </label>
+                <input type="file" id="csv" class="form-control-file" on-read-file="showContent($fileContent)"/>
+                <span title="Admin => Projet => Rapports => Rapports des récits utilisateurs" style="cursor: help;">(?)</span>
+                ou générez <a href="#" ng-click="fillBlank()">une feuille vierge</a>
+            </p>
+            <p class="filters" ng-show="!(!completeList)">
+                Filtrer par :
+                <label for="sprint">Sprint</label>
+                <input class="form-control" type="number" id="sprint" ng-model="filters.sprint" ng-change="filterList()">
+                <label for="ref.a"> ou User stories </label>
+                <input class="form-control" type="number" id="ref.a" name="ref.a" ng-model="filters.ref.a" ng-change="filterList()">
+                <input class="form-control" type="number" id="ref.b" name="ref.b" ng-model="filters.ref.b" ng-change="filterList()" ng-show="filters.ref.b || filters.ref.a">
+                <input class="form-control" type="number" id="ref.c" name="ref.c" ng-model="filters.ref.c" ng-change="filterList()" ng-show="filters.ref.c || filters.ref.b">
+                <input class="form-control" type="number" id="ref.d" name="ref.d" ng-model="filters.ref.d" ng-change="filterList()" ng-show="filters.ref.d || filters.ref.c">
+            </p>
+        </form>
+        <p></p>
+
+        <h2 ng-if="content.length>0">Résultats : {{ content.length }}</h2>
+        <h2 ng-if="content.length==0">Aucun résultat</h2>
+    </div>
+    <div class="content">
+        <div class="user-story" ng-repeat="c in content">
+            <table>
+                <tr>
+                    <td colspan="4">En tant que {{ c.enTantQue }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="subject">{{ c.subject }}</td>
+                </tr>
+                <tr>
+                    <td>{{ c.sprint }}</td>
+                    <td><span ng-if="c.ref">#</span><span ng-if="!c.ref" style="color:white">.</span>{{ c.ref }}</td>
+                    <td>{{ c.points }}</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a href="https://github.com/juliensoret/drawga">
+        <img style="position: absolute; top: 0; right: 0; border: 0;"
+             src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+             alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+    </a>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
