@@ -4,7 +4,7 @@ Drawga est une micro-application écrite en AngularJS permettant de formater le 
 
 ## Utiliser
 
-Vous pouvez utiliser l'application directement sur github à cette adresse : http://github.com/juliensoret/drawga .
+Vous pouvez utiliser l'application directement sur github à cette adresse : https://juliensoret.github.io/drawga .
 
 ## FAQ 
 
