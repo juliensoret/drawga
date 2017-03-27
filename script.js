@@ -4,12 +4,6 @@ var myApp = angular.module('myApp',[]);
 
 myApp.controller('myCtrl', ['$scope', function($scope){
 
-    var parameters = {
-        "ref" : -1,
-        "sprint" : -1,
-        "subject" : -1,
-        "points" : -1
-    };
     $scope.filters = {};
 
     $scope.showContent = function($fileContent){
@@ -18,16 +12,25 @@ myApp.controller('myCtrl', ['$scope', function($scope){
 
         for(var i=0; i<allLines.length; ++i){
             var data = allLines[i];
-            // Première ligne : noms de colonnes
+            // First line : column's names
             if(i==0){
+                var parameters = {
+                    "ref" : -1,
+                    "sprint" : -1,
+                    "subject" : -1,
+                    "points" : -1,
+                    "user_story" : -1
+                };
                 for(var j=0; j<data.length; ++j){
                     if(data[j] === 'ref') parameters.ref = j;
                     if(data[j] === 'sprint') parameters.sprint = j;
                     if(data[j] === 'subject') parameters.subject = j;
                     if(data[j] === 'total-points') parameters.points = j;
+                    if(data[j] === 'user_story') parameters.user_story = j;
                 }
+                $scope.isUserStories = (parameters.user_story === -1) && (parameters.points !== -1);
             }
-            // Reste : contenu du dump
+            // Content
             else {
                 if (data.length > 3) {
                     $scope.completeList.push({
@@ -35,7 +38,8 @@ myApp.controller('myCtrl', ['$scope', function($scope){
                         "sprint": findNumbers(data[parameters.sprint]),
                         "enTantQue": findEnTantQue(data[parameters.subject]),
                         "subject": data[parameters.subject],
-                        "points": data[parameters.points]
+                        "points": data[parameters.points],
+                        "user_story": data[parameters.user_story]
                     });
                 }
             }
@@ -47,11 +51,14 @@ myApp.controller('myCtrl', ['$scope', function($scope){
         $scope.content = [];
         if($scope.completeList) {
             for (var k = 0; k < $scope.completeList.length; ++k) {
+                // Filter : sprint (US - Task)
                 if ($scope.filters.sprint != undefined)
                     if ($scope.filters.sprint !== $scope.completeList[k]['sprint'])
                         continue;
+                // Filter : ref (US)
                 if (
-                    !$scope.filters.ref
+                    !$scope.isUserStories
+                    || !$scope.filters.ref
                     || (!$scope.filters.ref.a && !$scope.filters.ref.b && !$scope.filters.ref.c && !$scope.filters.ref.d)
                     || ($scope.filters.ref.a && $scope.filters.ref.a === ($scope.completeList[k]['ref']))
                     || ($scope.filters.ref.b && $scope.filters.ref.b === ($scope.completeList[k]['ref']))
@@ -63,8 +70,12 @@ myApp.controller('myCtrl', ['$scope', function($scope){
         }
     };
 
-    $scope.fillBlank = function() {
-        $scope.content = [{},{},{},{}];
+    $scope.fillBlank = function(isUserStories) {
+        $scope.isUserStories = isUserStories;
+        if(isUserStories)
+            $scope.content = [{},{},{},{}];
+        else
+            $scope.content = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
     }
 
 }]);

@@ -47,12 +47,17 @@ div.informations .filters label {
     display: inline-block;
     text-align: right;
 }
-div.informations .filters input {
+div.informations .filters p {
+    display: inline-block;
+}
+div.informations .filters input[type="number"] {
     width: 70px;
 }
 div.content {
     padding: 10px;
 }
+
+/* User Stories style */
 .user-story {
     display: inline-block;
     width: 500px;
@@ -84,6 +89,34 @@ div.content {
 .user-story tr:nth-child(3) td:nth-child(4) {
     width: 60%;
 }
+
+/* Task style */
+.task {
+    display: inline-block;
+    padding: 20px 0;
+    width: 190px;
+    height: 100px;
+    margin: 5px;
+    border: 2px solid black;
+    text-align: center;
+}
+.task .subject {
+    height: 100%;
+    padding: 0 20px;
+    overflow: hidden;
+}
+.task .info div {
+    display: inline-block;
+    width: 45%;
+}
+.task .info div:first-child {
+    text-align: left;
+    font-size: 80%;
+}
+.task .info div:last-child {
+    text-align: right;
+}
+
 @page {
     margin: 0.5cm;
 }

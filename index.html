@@ -10,27 +10,28 @@
     <div class="loader" ng-if="false">Chargement ...</div>
     <div class="informations no-print">
         <header class="page-header">
-            <h1>Drawga <span>Vos user stories Taiga prêtes à imprimer</span></h1>
+            <h1>Drawga <span>Vos user stories et tâches Taiga prêtes à imprimer</span></h1>
         </header>
         <form>
             <p>
                 <label for="csv">Fichier dump (.csv) de Taiga : </label>
                 <input type="file" id="csv" class="form-control-file" on-read-file="showContent($fileContent)"/>
                 <span title="Admin => Projet => Rapports => Rapports des récits utilisateurs" style="cursor: help;">(?)</span>
-                ou générez <a href="#" ng-click="fillBlank()">une feuille vierge</a>
+                ou générez une feuille vierge d'<a href="#" ng-click="fillBlank(true)">user stories</a> ou de <a href="#" ng-click="fillBlank(false)">tâches</a>
             </p>
             <p class="filters" ng-show="!(!completeList)">
                 Filtrer par :
                 <label for="sprint">Sprint</label>
                 <input class="form-control" type="number" id="sprint" ng-model="filters.sprint" ng-change="filterList()">
-                <label for="ref.a"> ou User stories </label>
-                <input class="form-control" type="number" id="ref.a" name="ref.a" ng-model="filters.ref.a" ng-change="filterList()">
-                <input class="form-control" type="number" id="ref.b" name="ref.b" ng-model="filters.ref.b" ng-change="filterList()" ng-show="filters.ref.b || filters.ref.a">
-                <input class="form-control" type="number" id="ref.c" name="ref.c" ng-model="filters.ref.c" ng-change="filterList()" ng-show="filters.ref.c || filters.ref.b">
-                <input class="form-control" type="number" id="ref.d" name="ref.d" ng-model="filters.ref.d" ng-change="filterList()" ng-show="filters.ref.d || filters.ref.c">
+                <span ng-show="isUserStories">
+                    <label for="ref.a"> ou User stories </label>
+                    <input class="form-control" type="number" id="ref.a" name="ref.a" ng-model="filters.ref.a" ng-change="filterList()">
+                    <input class="form-control" type="number" id="ref.b" name="ref.b" ng-model="filters.ref.b" ng-change="filterList()" ng-show="filters.ref.b || filters.ref.a">
+                    <input class="form-control" type="number" id="ref.c" name="ref.c" ng-model="filters.ref.c" ng-change="filterList()" ng-show="filters.ref.c || filters.ref.b">
+                    <input class="form-control" type="number" id="ref.d" name="ref.d" ng-model="filters.ref.d" ng-change="filterList()" ng-show="filters.ref.d || filters.ref.c">
+                </span>
             </p>
         </form>
-        <p></p>
 
         <h2 ng-if="content.length>0">Résultats : {{ content.length }}</h2>
         <h2 ng-if="content.length==0">Aucun résultat</h2>
@@ -42,7 +43,7 @@
         </a>
     </div>
     <div class="content">
-        <div class="user-story" ng-repeat="c in content">
+        <div class="user-story" ng-repeat="c in content" ng-if="isUserStories">
             <table>
                 <tr>
                     <td colspan="4">En tant que {{ c.enTantQue }}</td>
@@ -57,6 +58,13 @@
                     <td></td>
                 </tr>
             </table>
+        </div>
+        <div class="task" ng-repeat="c in content" ng-if="!isUserStories">
+            <div class="subject">{{ c.subject }}</div>
+            <div class="info">
+                <div ng-if="c.user_story">u{{ c.user_story }} <span ng-if="c.sprint">({{ c.sprint }})</span></div>
+                <div ng-if="c.ref">#{{ c.ref }}</div>
+            </div>
         </div>
     </div>
 
