@@ -1,6 +1,6 @@
 # Drawga
 
-Drawga est une micro-application écrite en AngularJS permettant de formater le contenu d'un export de User Stories (Récits d'Utilisateurs) d'un projet Taiga.
+Drawga est une micro-application écrite en AngularJS permettant de formater le contenu d'un export de User Stories (Récits d'Utilisateurs) ou de Tâches d'un projet Taiga.
 
 ## Utiliser
 
@@ -10,11 +10,11 @@ Vous pouvez utiliser l'application directement sur github à cette adresse : htt
 
 > Comment exporter le fichier .csv nécessaire ?
 
-Dans votre projet Taiga : Partie Administration, puis Projet => Rapports => Rapports des récits utilisateurs.
+Dans votre projet Taiga : Partie Administration, puis Projet => Rapports => Rapports des récits utilisateurs / tâches.
 
-> Comment est remplie la case "En tant que" ?
+> Comment est remplie la case "En tant que" d'une User Story ?
 
-Pour le moment, l'application utilise le premier texte placé entre `En tant que` et `je` ou entre `[` et `]`.
+Pour le moment, l'application utilise le premier texte placé entre `En tant que` et `je` ou entre `[` et `]` ou laisse la case vide.
 
 ## Crédits
 

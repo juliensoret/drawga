@@ -30,6 +30,11 @@
                     <input class="form-control" type="number" id="ref.c" name="ref.c" ng-model="filters.ref.c" ng-change="filterList()" ng-show="filters.ref.c || filters.ref.b">
                     <input class="form-control" type="number" id="ref.d" name="ref.d" ng-model="filters.ref.d" ng-change="filterList()" ng-show="filters.ref.d || filters.ref.c">
                 </span>
+                <span ng-show="!isUserStories">
+                    <label for="user_story" title="En les séparant par des virgules"> ou User stories </label>
+                    <input class="form-control" type="text" id="user_story" name="user_story" ng-model="filters.user_story" ng-change="filterList()">
+                    <a href="#" ng-click="toggleFilterSwitch()">({{ filters.user_story_include ? "inclure" : "exclure" }})</a>
+                </span>
             </p>
         </form>
 

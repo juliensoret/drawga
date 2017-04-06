@@ -5,6 +5,7 @@ var myApp = angular.module('myApp',[]);
 myApp.controller('myCtrl', ['$scope', function($scope){
 
     $scope.filters = {};
+    $scope.filters.user_story_include = true;
 
     $scope.showContent = function($fileContent){
         $scope.completeList = [];
@@ -12,6 +13,7 @@ myApp.controller('myCtrl', ['$scope', function($scope){
 
         for(var i=0; i<allLines.length; ++i){
             var data = allLines[i];
+
             // First line : column's names
             if(i==0){
                 var parameters = {
@@ -30,6 +32,7 @@ myApp.controller('myCtrl', ['$scope', function($scope){
                 }
                 $scope.isUserStories = (parameters.user_story === -1) && (parameters.points !== -1);
             }
+
             // Content
             else {
                 if (data.length > 3) {
@@ -39,7 +42,7 @@ myApp.controller('myCtrl', ['$scope', function($scope){
                         "enTantQue": findEnTantQue(data[parameters.subject]),
                         "subject": data[parameters.subject],
                         "points": data[parameters.points],
-                        "user_story": data[parameters.user_story]
+                        "user_story": findNumbers(data[parameters.user_story])
                     });
                 }
             }
@@ -51,10 +54,25 @@ myApp.controller('myCtrl', ['$scope', function($scope){
         $scope.content = [];
         if($scope.completeList) {
             for (var k = 0; k < $scope.completeList.length; ++k) {
+
                 // Filter : sprint (US - Task)
                 if ($scope.filters.sprint != undefined)
                     if ($scope.filters.sprint !== $scope.completeList[k]['sprint'])
                         continue;
+
+                // Filter : US (Task)
+                if (!$scope.isUserStories && $scope.filters.user_story) {
+                    var userstories = $scope.filters.user_story.split(',');
+                    var presentInTheFilter = false;
+                    for (var i=0; i < userstories.length; ++i){
+                        if (findNumbers(userstories[i]) === $scope.completeList[k]['user_story']) {
+                            presentInTheFilter = true;
+                            break;
+                        }
+                    }
+                    if($scope.filters.user_story_include != presentInTheFilter) continue;
+                }
+
                 // Filter : ref (US)
                 if (
                     !$scope.isUserStories
@@ -78,6 +96,11 @@ myApp.controller('myCtrl', ['$scope', function($scope){
             $scope.content = [{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
     }
 
+    $scope.toggleFilterSwitch = function() {
+        $scope.filters.user_story_include = !$scope.filters.user_story_include;
+        $scope.filterList();
+    }
+
 }]);
 
 function findEnTantQue(string) {
@@ -98,8 +121,10 @@ function findEnTantQue(string) {
 }
 
 function findNumbers(string) {
-    var int = parseInt(string.replace(/\D/g,''));
-    if (!isNaN(int)) return int;
+    if (string != undefined){
+        var int = parseInt(string.replace(/\D/g,''));
+        if (!isNaN(int)) return int;
+    }
     return '';
 }
 
